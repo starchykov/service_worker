@@ -13,23 +13,19 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late ColorScheme currentColorScheme;
-  late AssetImage selectedImage = const AssetImage('images/chameleon.jpg');
-  late bool isLoading;
+  late ColorScheme _currentColorScheme;
+  late Image _selectedImage = const Image(image: AssetImage('assets/images/chameleon.jpg'));
 
   @override
   void initState() {
     super.initState();
-    currentColorScheme = const ColorScheme.light();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _updateImage(selectedImage);
-      isLoading = false;
-    });
+    _currentColorScheme = const ColorScheme.light();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _updateImage(_selectedImage.image));
   }
 
   Future<void> _updateImage(ImageProvider provider) async {
     final ColorScheme newColorScheme = await ColorScheme.fromImageProvider(provider: provider);
-    setState(() => currentColorScheme = newColorScheme);
+    setState(() => _currentColorScheme = newColorScheme);
   }
 
   // This widget is the root of your application.
@@ -53,10 +49,10 @@ class _MyAppState extends State<MyApp> {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: currentColorScheme,
+        colorScheme: _currentColorScheme,
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Flutter service worker demo'),
     );
   }
 }
@@ -126,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
         alignment: Alignment.center,
         fit: StackFit.expand,
         children: <Widget>[
-          Image.asset(fit: BoxFit.cover, 'images/chameleon.jpg'),
+          Image(fit: BoxFit.cover, image: AssetImage('assets/images/chameleon.jpg')),
         ],
       ),
       floatingActionButton: FloatingActionButton(
